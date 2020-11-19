@@ -2,14 +2,14 @@ import axios from './axiosConfig'
 import router from '../router'
 
 export default {
-  async getCurriculum ({ commit }, id) {
+  async getCurriculum({ commit }, id) {
     const { data } = await axios.get(`curricula/${id}`)
     console.log(data)
     const curr = { ...data.curriculum, createdByName: data.createdByName }
     console.log(curr)
     commit('updateSelectedCurriculum', curr)
   },
-  async getCurricula ({ commit }, payload) {
+  async getCurricula({ commit }, payload) {
     const { currentPage, userId } = payload
     let res = {}
     if (userId) {
@@ -27,7 +27,7 @@ export default {
       commit('updateCurricula', res.data.docs)
     }
   },
-  async postCurriculum ({ commit }, curriculum) {
+  async postCurriculum({ commit }, curriculum) {
     const res = await axios.post(
       'curricula',
       curriculum
@@ -35,17 +35,17 @@ export default {
     commit('appendCurriculum', res.data)
     router.push(`/curricula/${res.data._id}`)
   },
-  async patchCurriculum ({ commit }, payload) {
+  async patchCurriculum({ commit }, payload) {
     const { curriculumId, body } = payload
     const res = await axios.patch(`curricula/${curriculumId}`, body)
     // commit('updateCurriculum', payload)
   },
-  async deleteCurriculum ({ commit }, curriculumId) {
+  async deleteCurriculum({ commit }, curriculumId) {
     const res = await axios.delete(`curricula/${curriculumId}`)
     console.log(res)
     commit('removeCurriculum', curriculumId)
   },
-  async postSection ({ commit }, payload) {
+  async postSection({ commit }, payload) {
     const { curriculumId, body } = payload
     const res = await axios.post(
       `curricula/${curriculumId}/sections`,
@@ -55,7 +55,7 @@ export default {
     updatedPayload.body = res.data
     commit('updateSection', updatedPayload)
   },
-  async patchSection ({ commit }, payload) {
+  async patchSection({ commit }, payload) {
     const {
       curriculumId,
       section
@@ -64,9 +64,9 @@ export default {
       `curricula/${curriculumId}/sections/${section._id}`,
       { goal: section.goal, name: section.name }
     )
-    // commit('upsertSection', section)
+    // commit('upsertSection', section)s
   },
-  async deleteSection ({ commit }, payload) {
+  async deleteSection({ commit }, payload) {
     const { curriculumId, sectionId } = payload
     await axios.delete(
       `curricula/${curriculumId}/sections/${sectionId}`
@@ -74,7 +74,7 @@ export default {
     commit('removeSection', payload)
   },
 
-  async postItem ({ commit }, payload) {
+  async postItem({ commit }, payload) {
     let { curriculumId, sectionId, type, body } = payload
     const res = await axios.post(
       `curricula/${curriculumId}/sections/${sectionId}/${type}`,
@@ -85,7 +85,7 @@ export default {
     payload.body = res.data
     commit('upsertItem', payload)
   },
-  async putItem ({ commit }, payload) {
+  async putItem({ commit }, payload) {
     const { curriculumId, sectionId, itemId, type, body } = payload
     const res = await axios.patch(
       `curricula/${curriculumId}/sections/${sectionId}/${type}/${itemId}`,
@@ -93,7 +93,7 @@ export default {
     )
     commit('upsertItem', payload)
   },
-  async patchItem ({ commit }, payload) {
+  async patchItem({ commit }, payload) {
     const {
       curriculum,
       type,
@@ -106,7 +106,7 @@ export default {
     )
     commit('upsertItem', curriculum)
   },
-  async deleteItem ({ commit }, payload) {
+  async deleteItem({ commit }, payload) {
     const {
       curriculumId,
       type,
@@ -120,7 +120,7 @@ export default {
     console.log(res)
     commit('removeItem', payload)
   },
-  async countAllCompleted ({ commit }) {
+  async countAllCompleted({ commit }) {
     const res = await axios.get(
       `count`
     )
